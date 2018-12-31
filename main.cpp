@@ -6,17 +6,9 @@
 // **Prefer using the code in the example_sdl_opengl3/ folder**
 // See imgui_impl_sdl.cpp for details.
 
-#include "src/3rdParty/ImGui/imgui.h"
-#include "src/3rdParty/ImGui/imgui_impl_sdl.h"
-#include "src/3rdParty/ImGui/imgui_impl_opengl2.h"
 #include "src/MonitorX.h"
-#include <stdio.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <entityx/entityx.h>
+#include "test/Test.h"
 
-
-using namespace entityx;
 
 int main(int, char **) {
 
@@ -40,7 +32,7 @@ int main(int, char **) {
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
 
-    EntityX entityX;
+    entityx::EntityX entityX;
     monitorX::MonitorX monitorX(&entityX, window, &gl_context);
     monitorX.Init();
 
@@ -54,18 +46,7 @@ int main(int, char **) {
             if (event.type == SDL_QUIT)
                 done = true;
             if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_D: {
-                        monitorX.ShowDemo(true);
-                        break;
-                    }
-                    case SDL_SCANCODE_C: {
-                        monitorX.ShowDemo(false);
-                        break;
-                    }
-                    default:
-                        break;
-                }
+                TestKey(event.key.keysym.scancode, monitorX, entityX);
             }
         }
 

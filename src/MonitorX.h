@@ -8,7 +8,6 @@
 #include "3rdParty/ImGui/imgui.h"
 #include "3rdParty/ImGui/imgui_impl_sdl.h"
 #include "3rdParty/ImGui/imgui_impl_opengl2.h"
-#include "MonitorX.h"
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
