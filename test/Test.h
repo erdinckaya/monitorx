@@ -11,7 +11,7 @@
 #include "components/Size.h"
 
 
-void TestKey(SDL_Scancode scancode, monitorX::MonitorX &monitorX, entityx::EntityX &entityX) {
+void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::EntityX &entityX) {
     switch (scancode) {
         case SDL_SCANCODE_D: {
             monitorX.ShowDemo(true);
@@ -19,6 +19,7 @@ void TestKey(SDL_Scancode scancode, monitorX::MonitorX &monitorX, entityx::Entit
         }
         case SDL_SCANCODE_C: {
             monitorX.ShowDemo(false);
+            monitorX.ShowEntityEditor(false);
             break;
         }
         case SDL_SCANCODE_A: {
@@ -41,8 +42,7 @@ void TestKey(SDL_Scancode scancode, monitorX::MonitorX &monitorX, entityx::Entit
                        member.type->value(&pos, member.offset).c_str());
             }
 
-
-            printf("Full name is %s\n", typeDesc->getFullName().c_str());
+            monitorX.ShowEntityEditor(true);
 
             break;
         }

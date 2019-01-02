@@ -37,13 +37,14 @@ int main(int, char **) {
 
 
     entityx::EntityX entityX;
-    monitorX::MonitorX monitorX(&entityX, window, &gl_context);
+    monitorx::MonitorX monitorX(&entityX, window, &gl_context);
     monitorX.Init();
 
 
     // Main loop
     bool done = false;
     while (!done) {
+        const Uint32 start_time_ms = SDL_GetTicks();
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             monitorX.ProcessEvent(&event);
@@ -58,6 +59,12 @@ int main(int, char **) {
         SDL_GL_MakeCurrent(window, gl_context);
         SDL_GL_SwapWindow(window);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        const auto ms_per_frame = static_cast<const Uint32>(1000/*ms*/ / 60.0f);
+        const Uint32 elapsed_time_ms = SDL_GetTicks() - start_time_ms;
+        if (elapsed_time_ms < ms_per_frame) {
+            SDL_Delay(ms_per_frame - elapsed_time_ms);
+        }
     }
 
     // Cleanup

@@ -5,7 +5,7 @@
 #ifndef MONITORX_POSITION_H
 #define MONITORX_POSITION_H
 
-#include "../../src/MonitorX.h"
+#include "../../src/3rdParty/FlexibleReflection/Reflect.h"
 
 struct Position {
     explicit Position(float x = 0.0f, float y = 0.0f) : x(x), y(y) {}
@@ -15,11 +15,6 @@ struct Position {
     REFLECT()
 };
 
-
-REFLECT_STRUCT_BEGIN(Position)
-                    REFLECT_STRUCT_MEMBER(x)
-                    REFLECT_STRUCT_MEMBER(y)
-REFLECT_STRUCT_END()
 
 
 

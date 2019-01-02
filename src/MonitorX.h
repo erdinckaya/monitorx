@@ -13,10 +13,13 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
+#include "../test/components/Position.h"
+#include "../test/components/Size.h"
+
 
 #include <entityx/entityx.h>
 
-namespace monitorX {
+namespace monitorx {
     class MonitorX {
     public:
         MonitorX(entityx::EntityX *entityX, SDL_Window *window, SDL_GLContext *context) :
@@ -34,12 +37,22 @@ namespace monitorX {
 
         void ShowDemo(bool value);
 
+        void ShowEntityEditor(bool value);
+
     private:
+
+        void RenderEntityEditor();
+
         entityx::EntityX *entityX;
         SDL_Window *window;
         SDL_GLContext *context;
 
+
+        //region Flags
         bool showDemo;
+        bool entityEditorFlag;
+        //endregion
+
     };
 }
 
