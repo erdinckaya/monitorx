@@ -8,9 +8,11 @@
 #include "3rdParty/ImGui/imgui.h"
 #include "3rdParty/ImGui/imgui_impl_sdl.h"
 #include "3rdParty/ImGui/imgui_impl_opengl2.h"
+#include "3rdParty/FlexibleReflection/Reflect.h"
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
+
 
 #include <entityx/entityx.h>
 
@@ -20,7 +22,7 @@ namespace monitorX {
         MonitorX(entityx::EntityX *entityX, SDL_Window *window, SDL_GLContext *context) :
                 entityX(entityX), window(window), context(context), showDemo(false) {}
 
-        int Init();
+        void Init();
 
         void Render();
 

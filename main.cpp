@@ -29,7 +29,11 @@ int main(int, char **) {
     SDL_Window *window = SDL_CreateWindow("Dear ImGui SDL2+OpenGL example", SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     SDL_GL_SetSwapInterval(1); // Enable vsync
+
+
 
 
     entityx::EntityX entityX;

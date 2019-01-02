@@ -15,7 +15,9 @@ add_executable(monitorx main.cpp src/3rdParty/ImGui/imconfig.h src/3rdParty/ImGu
         src/3rdParty/ImGui/imgui_demo.cpp src/3rdParty/ImGui/imgui_draw.cpp src/3rdParty/ImGui/imgui_impl_opengl2.h
         src/3rdParty/ImGui/imgui_impl_opengl2.cpp src/3rdParty/ImGui/imgui_impl_sdl.h src/3rdParty/ImGui/imgui_impl_sdl.cpp
         src/3rdParty/ImGui/imgui_internal.h src/3rdParty/ImGui/imgui_widgets.cpp src/3rdParty/ImGui/imstb_rectpack.h
-        src/3rdParty/ImGui/imstb_textedit.h src/3rdParty/ImGui/imstb_truetype.h src/MonitorX.cpp src/MonitorX.h test/Test.h test/components/Position.h test/components/Size.h)
+        src/3rdParty/ImGui/imstb_textedit.h src/3rdParty/ImGui/imstb_truetype.h src/MonitorX.cpp src/MonitorX.h test/Test.h
+        test/components/Position.h test/components/Size.h
+        src/3rdParty/FlexibleReflection/Primitives.cpp src/3rdParty/FlexibleReflection/Reflect.h)
 
 
 target_link_libraries(monitorx ${ENTITYX_LIBRARY} ${SDL2_LIBRARY} ${OPENGL_gl_LIBRARY})

@@ -10,6 +10,7 @@
 #include "components/Position.h"
 #include "components/Size.h"
 
+
 void TestKey(SDL_Scancode scancode, monitorX::MonitorX &monitorX, entityx::EntityX &entityX) {
     switch (scancode) {
         case SDL_SCANCODE_D: {
@@ -22,14 +23,27 @@ void TestKey(SDL_Scancode scancode, monitorX::MonitorX &monitorX, entityx::Entit
         }
         case SDL_SCANCODE_A: {
             auto entity = entityX.entities.create();
-            entity.assign<Position>(10, 10);
+            entity.assign<Position>(10, 20);
             entity.assign<Size>(30, 40);
 
-            entityX.entities
-            for (auto ent : entityX.entities.entities_for_debugging()) {
-                auto tuple = ent.components();
-                printf("123123123\n");
+
+            Position pos(10, 20);
+            Size size(30, 40);
+
+            reflect::TypeDescriptor *typeDesc = reflect::TypeResolver<Position>::get();
+            typeDesc->dump(&pos);
+            typeDesc = reflect::TypeResolver<Size>::get();
+            typeDesc->dump(&size);
+
+            printf("\n");
+            for (auto member : Position::Reflection.members) {
+                printf("Name %s Type %s Value %s\n", member.name, member.type->type(&pos).c_str(),
+                       member.type->value(&pos, member.offset).c_str());
             }
+
+
+            printf("Full name is %s\n", typeDesc->getFullName().c_str());
+
             break;
         }
         default:

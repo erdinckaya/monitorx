@@ -20,7 +20,7 @@ void monitorX::MonitorX::Render() {
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }
 
-int monitorX::MonitorX::Init() {
+void monitorX::MonitorX::Init() {
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
