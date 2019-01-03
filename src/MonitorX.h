@@ -13,10 +13,6 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-#include "../test/components/Position.h"
-#include "../test/components/Size.h"
-
-
 #include <entityx/entityx.h>
 
 #include <type_traits>
@@ -117,7 +113,10 @@ namespace monitorx {
                             ImGui::DragFloat(guiIdStr.c_str(), (float *) ((char *) pos + member.offset),
                                              0.02f, FLT_MIN, FLT_MAX, "%.2f", 2.0f);
                         } else if (strcmp(member.type->type(pos).c_str(), "string") == 0) {
-                            ImGui::Text("%s", member.type->value(pos, member.offset).c_str());
+                            auto *str = (std::string *) ((char *) pos + member.offset);
+                            ImGui::InputText(guiIdStr.c_str(), (char *) str->c_str(), str->capacity() + 1,
+                                             ImGuiInputTextFlags_CallbackResize, InputTextCallback, (void *) str);
+
                         } else if (strcmp(member.type->type(pos).c_str(), "bool") == 0) {
                             ImGui::Checkbox(guiIdStr.c_str(), (bool *) ((char *) pos + member.offset));
                         }
@@ -133,7 +132,20 @@ namespace monitorx {
 
             RenderComponent<C1, Components...>();
         }
+
+        static int InputTextCallback(ImGuiInputTextCallbackData *data) {
+            if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+                // Resize string callback
+                auto *str = (std::string *) data->UserData;
+                IM_ASSERT(data->Buf == str->c_str());
+                str->resize(static_cast<unsigned long>(data->BufTextLen));
+                data->Buf = (char *) str->c_str();
+            }
+            return 0;
+        }
     };
+
+
 }
 
 

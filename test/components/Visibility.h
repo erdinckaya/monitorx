@@ -8,8 +8,11 @@
 #include "../../src/3rdParty/FlexibleReflection/Reflect.h"
 
 struct Visibility {
-    explicit Visibility(bool value = false) : value(value){}
+    explicit Visibility(bool value = false, std::string name = "visibility") : value(value), name(name) {}
+
+    std::string name;
     bool value;
     REFLECT()
 };
+
 #endif //MONITORX_VISIBILITY_H
