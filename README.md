@@ -32,7 +32,7 @@ REFLECT_STRUCT_END()
 ```
 
 For now reflection supports basic types, however you can add your types easily.
-If you find more information about reflection. You can look at this site. Thanks to Preshing.
+If you want to find more information about reflection, you can look at this site. Thanks to Preshing.
 https://preshing.com/20180116/a-primitive-reflection-system-in-cpp-part-1/
 
 In Primitives.cpp just add the template like that.
