@@ -9,6 +9,7 @@
 #include "../src/MonitorX.h"
 #include "components/Position.h"
 #include "components/Size.h"
+#include "components/Visibility.h"
 
 
 void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::EntityX &entityX) {
@@ -26,6 +27,7 @@ void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::Entit
             auto entity = entityX.entities.create();
             entity.assign<Position>(10, 20);
             entity.assign<Size>(30, 40);
+            entity.assign<Visibility>(true);
 
 
             Position pos(10, 20);

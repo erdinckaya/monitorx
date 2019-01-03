@@ -139,4 +139,31 @@ namespace reflect {
         return &typeDesc;
     }
 
+//--------------------------------------------------------
+// A type descriptor for bool
+//--------------------------------------------------------
+
+    struct TypeDescriptor_Bool : TypeDescriptor {
+        TypeDescriptor_Bool() : TypeDescriptor{"bool", sizeof(long)} {
+        }
+
+        void dump(const void *obj, int /* unused */) const override {
+            std::cout << "bool{" << *(const bool *) obj << "}";
+        }
+
+        std::string type(const void *obj) const override {
+            return "bool";
+        }
+
+        std::string value(const void *obj, size_t offset) const override {
+            return std::to_string(*(const bool *) ((char*)obj + offset));
+        }
+    };
+
+    template<>
+    TypeDescriptor *getPrimitiveDescriptor<bool>() {
+        static TypeDescriptor_Bool typeDesc;
+        return &typeDesc;
+    }
+
 } // namespace reflect
