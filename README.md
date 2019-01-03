@@ -54,10 +54,6 @@ struct TypeDescriptor_Long : TypeDescriptor {
     std::string type(const void *obj) const override {
         return "long";
     }
-
-    std::string value(const void *obj, size_t offset) const override {
-        return std::to_string(*(const long *) ((char*)obj + offset));
-    }
 };
 
 template<>

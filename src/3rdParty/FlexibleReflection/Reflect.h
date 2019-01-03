@@ -15,6 +15,7 @@ namespace reflect {
     struct TypeDescriptor {
         const char *name;
         size_t size;
+        const char *template_name;
 
         TypeDescriptor(const char *name, size_t size) : name{name}, size{size} {}
 
@@ -25,8 +26,6 @@ namespace reflect {
         virtual void dump(const void *obj, int indentLevel = 0) const = 0;
 
         virtual std::string type(const void *obj) const = 0;
-
-        virtual std::string value(const void *obj, size_t offset) const = 0;
     };
 
 //--------------------------------------------------------
@@ -98,10 +97,6 @@ namespace reflect {
             return std::string("struct");
         }
 
-        std::string value(const void *obj, size_t offset) const override {
-            return std::string();
-        }
-
         virtual void dump(const void *obj, int indentLevel) const override {
             std::cout << name << " {" << std::endl;
             for (const Member &member : members) {
@@ -132,6 +127,28 @@ namespace reflect {
 #define REFLECT_STRUCT_END() \
         }; \
     }
+
+
+#define REFLECT_TEMPLATE(type, template_type) \
+    friend struct reflect::DefaultResolver; \
+    static reflect::TypeDescriptor_Struct Reflection; \
+    static void initReflection(reflect::TypeDescriptor_Struct* typeDesc) {\
+        using T = type; \
+        typeDesc->name = #type; \
+        typeDesc->template_name = #template_type; \
+        typeDesc->size = sizeof(T); \
+        typeDesc->members = {
+
+
+#define REFLECT_STRUCT_MEMBER_TEMPLATE(name) \
+            {#name, offsetof(T, name), reflect::TypeResolver<decltype(T::name)>::get()},
+
+
+#define REFLECT_STRUCT_INIT_TEMPLATE(type) \
+    template<typename C> \
+    reflect::TypeDescriptor_Struct type<C>::Reflection{type<C>::initReflection}; \
+
+
 
 //--------------------------------------------------------
 // Type descriptors for std::vector
@@ -164,10 +181,6 @@ namespace reflect {
 
         std::string type(const void *obj) const override {
             return "vector";
-        }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return std::string();
         }
 
         virtual void dump(const void *obj, int indentLevel) const override {

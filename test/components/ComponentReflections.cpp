@@ -15,9 +15,11 @@ REFLECT_STRUCT_END()
 REFLECT_STRUCT_BEGIN(Size)
                     REFLECT_STRUCT_MEMBER(w)
                     REFLECT_STRUCT_MEMBER(h)
+                    REFLECT_STRUCT_MEMBER(pos)
 REFLECT_STRUCT_END()
 
 REFLECT_STRUCT_BEGIN(Visibility)
                     REFLECT_STRUCT_MEMBER(value)
                     REFLECT_STRUCT_MEMBER(name)
 REFLECT_STRUCT_END()
+

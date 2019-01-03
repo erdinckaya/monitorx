@@ -17,11 +17,6 @@ namespace reflect {
         std::string type(const void *obj) const override {
             return "int";
         }
-
-        std::string value(const void *obj, size_t offset) const override {
-
-            return std::to_string(*(const int *) ((char*)obj + offset));
-        }
     };
 
     template<>
@@ -45,10 +40,6 @@ namespace reflect {
         std::string type(const void *obj) const override {
             return "string";
         }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return *(const std::string *) obj;
-        }
     };
 
     template<>
@@ -71,10 +62,6 @@ namespace reflect {
 
         std::string type(const void *obj) const override {
             return "double";
-        }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return std::to_string(*(const double *) ((char*)obj + offset));
         }
     };
 
@@ -100,10 +87,6 @@ namespace reflect {
         std::string type(const void *obj) const override {
             return "float";
         }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return std::to_string(*(const float *) ((char*)obj + offset));
-        }
     };
 
     template<>
@@ -127,10 +110,6 @@ namespace reflect {
         std::string type(const void *obj) const override {
             return "long";
         }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return std::to_string(*(const long *) ((char*)obj + offset));
-        }
     };
 
     template<>
@@ -153,10 +132,6 @@ namespace reflect {
 
         std::string type(const void *obj) const override {
             return "bool";
-        }
-
-        std::string value(const void *obj, size_t offset) const override {
-            return std::to_string(*(const bool *) ((char*)obj + offset));
         }
     };
 

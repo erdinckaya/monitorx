@@ -17,6 +17,12 @@
 
 #include <type_traits>
 
+#ifndef __APPLE__
+
+#include <climits>
+
+#endif
+
 struct end_of_list;
 
 namespace monitorx {
@@ -81,8 +87,8 @@ namespace monitorx {
 
             ImGui::Begin("Entity Editor", &entityEditorFlag, 0);
             for (entityx::Entity entity : entityX->entities.entities_for_debugging()) {
-                auto id = ("Entity_" + std::to_string(entity.id().id())).c_str();
-                if (ImGui::CollapsingHeader(id)) {
+                auto str = "Entity##" + std::to_string(entity.id().id());
+                if (ImGui::CollapsingHeader(str.c_str())) {
                     currentEntity = entity;
                     RenderComponent<Components...>();
                 }
@@ -98,40 +104,57 @@ namespace monitorx {
         template<typename C, typename C1, typename... Components>
         void RenderComponent() {
             if (currentEntity.has_component<C>()) {
+                auto obj = (const void *) currentEntity.component<C>().get();
                 auto *typeDesc = dynamic_cast<reflect::TypeDescriptor_Struct *>(reflect::TypeResolver<C>::get());
-                if (ImGui::TreeNode(typeDesc->name)) {
-                    auto pos = currentEntity.component<C>().get();
-                    for (auto member : typeDesc->members) {
-                        std::string guiIdStr = "##" + std::to_string(currentEntity.id().id()) + member.name;
-                        if (strcmp(member.type->type(pos).c_str(), "float") == 0) {
-                            ImGui::DragFloat(guiIdStr.c_str(), (float *) ((char *) pos + member.offset),
-                                             0.02f, FLT_MIN, FLT_MAX, "%.2f", 2.0f);
-                        } else if (strcmp(member.type->type(pos).c_str(), "int") == 0) {
-                            ImGui::DragInt(guiIdStr.c_str(), (int *) ((char *) pos + member.offset),
-                                           0.02f, INT_MIN, INT_MAX, "%.2f");
-                        } else if (strcmp(member.type->type(pos).c_str(), "double") == 0) {
-                            ImGui::DragFloat(guiIdStr.c_str(), (float *) ((char *) pos + member.offset),
-                                             0.02f, FLT_MIN, FLT_MAX, "%.2f", 2.0f);
-                        } else if (strcmp(member.type->type(pos).c_str(), "string") == 0) {
-                            auto *str = (std::string *) ((char *) pos + member.offset);
-                            ImGui::InputText(guiIdStr.c_str(), (char *) str->c_str(), str->capacity() + 1,
-                                             ImGuiInputTextFlags_CallbackResize, InputTextCallback, (void *) str);
-
-                        } else if (strcmp(member.type->type(pos).c_str(), "bool") == 0) {
-                            ImGui::Checkbox(guiIdStr.c_str(), (bool *) ((char *) pos + member.offset));
-                        }
-
-                        ImGui::SameLine(0);
-                        ImGui::Text("%s %s", member.name, member.type->type(pos).c_str());
-                    }
-
-                    ImGui::TreePop();
-                    ImGui::Separator();
+                if (typeDesc != nullptr) {
+                    RenderStruct(typeDesc, obj, std::to_string(currentEntity.id().id()));
                 }
             }
 
             RenderComponent<C1, Components...>();
         }
+
+        void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase) {
+            auto elemID = std::string(typeDesc->name) + "##" + idBase;
+            if (ImGui::TreeNode(elemID.c_str())) {
+                elemID = idBase + std::string(typeDesc->name);
+                for (auto member : typeDesc->members) {
+                    auto strID = std::string(member.name).append("##").append(elemID);
+                    if (strcmp(member.type->type(obj).c_str(), "float") == 0) {
+                        ImGui::PushItemWidth(100);
+                        ImGui::DragFloat(strID.c_str(), (float *) ((char *) obj + member.offset),
+                                         0.02f, FLT_MIN, FLT_MAX, "%.2f", 2.0f);
+                    } else if (strcmp(member.type->type(obj).c_str(), "int") == 0) {
+                        ImGui::PushItemWidth(100);
+                        ImGui::DragInt(strID.c_str(), (int *) ((char *) obj + member.offset),
+                                       0.02f, INT_MIN, INT_MAX, "%.2f");
+                    } else if (strcmp(member.type->type(obj).c_str(), "double") == 0) {
+                        ImGui::PushItemWidth(100);
+                        ImGui::DragFloat(strID.c_str(), (float *) ((char *) obj + member.offset),
+                                         0.02f, FLT_MIN, FLT_MAX, "%.2f", 2.0f);
+                    } else if (strcmp(member.type->type(obj).c_str(), "string") == 0) {
+                        ImGui::PushItemWidth(100);
+                        auto *str = (std::string *) ((char *) obj + member.offset);
+                        ImGui::InputText(strID.c_str(), (char *) str->c_str(), str->capacity() + 1,
+                                         ImGuiInputTextFlags_CallbackResize, InputTextCallback, (void *) str);
+
+                    } else if (strcmp(member.type->type(obj).c_str(), "bool") == 0) {
+                        ImGui::Checkbox(strID.c_str(), (bool *) ((char *) obj + member.offset));
+                    } else if (strcmp(member.type->type(obj).c_str(), "struct") == 0) {
+                        const void *next_obj = ((char *) obj + member.offset);
+                        std::string nextID = elemID.append(member.name);
+                        RenderStruct(dynamic_cast<reflect::TypeDescriptor_Struct *>(member.type), next_obj, nextID);
+                    }
+
+                    ImGui::SameLine(0);
+                    ImGui::Text("%s", member.type->type(obj).c_str());
+                }
+
+                ImGui::TreePop();
+                ImGui::Separator();
+            }
+        }
+
 
         static int InputTextCallback(ImGuiInputTextCallbackData *data) {
             if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {

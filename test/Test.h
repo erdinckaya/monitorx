@@ -26,23 +26,13 @@ void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::Entit
         case SDL_SCANCODE_A: {
             auto entity = entityX.entities.create();
             entity.assign<Position>(10, 20);
-            entity.assign<Size>(30, 40);
+            entity.assign<Size>(30, 40, Vec2<float>(100, 200));
             entity.assign<Visibility>(true);
 
-
-            Position pos(10, 20);
-            Size size(30, 40);
-
-            reflect::TypeDescriptor *typeDesc = reflect::TypeResolver<Position>::get();
-            typeDesc->dump(&pos);
-            typeDesc = reflect::TypeResolver<Size>::get();
-            typeDesc->dump(&size);
-
-            printf("\n");
-            for (auto member : Position::Reflection.members) {
-                printf("Name %s Type %s Value %s\n", member.name, member.type->type(&pos).c_str(),
-                       member.type->value(&pos, member.offset).c_str());
-            }
+            entity = entityX.entities.create();
+            entity.assign<Position>(30, 40);
+            entity.assign<Size>(50, 50, Vec2<float>(400, 500));
+            entity.assign<Visibility>(false);
 
             monitorX.ShowEntityEditor(true);
 
