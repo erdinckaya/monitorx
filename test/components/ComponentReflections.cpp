@@ -19,4 +19,5 @@ REFLECT_STRUCT_END()
 
 REFLECT_STRUCT_BEGIN(Visibility)
                     REFLECT_STRUCT_MEMBER(value)
+                    REFLECT_STRUCT_MEMBER(name)
 REFLECT_STRUCT_END()
