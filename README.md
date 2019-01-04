@@ -1,9 +1,28 @@
 # monitorx
-Monitorx is basic imgui ui for monitoring entityx. It uses SDL2, OpenGL2, EntityX,
+MonitorX is basic imgui editor for monitoring entityx. It uses SDL2, OpenGL2, EntityX,
 imgui and Preshing's reflection.
+
+# Prerequisites
+* [SDL2](https://wiki.libsdl.org/Installation)
+* [OpenGL](https://www.opengl.org/)
+* [EntityX](https://github.com/alecthomas/entityx)
+
+You can find [FindSDL2.cmake](https://github.com/erdinckaya/monitorx/blob/master/cmake/FindSDL2.cmake) and [FindOpenGL.cmake](https://github.com/erdinckaya/monitorx/blob/master/cmake/FindOpenGL.cmake) and [FindEntityx.cmake](https://github.com/erdinckaya/monitorx/blob/master/cmake/FindEntityx.cmake) in cmake folder.
+
+# Build
+[CMake](https://cmake.org/) is required. Quick start:
+```
+$ git clone https://github.com/erdinckaya/monitorx
+$ cd monitorx
+$ mkdir build
+$ cd build
+$ cmake ..
+```
 
 # Usage
 You can just copy the files under src folder to your project that's it!
+
+If your project is already integrated to imgui you dont need to copy imgui folder.
 
 You should create your component in this way
 
@@ -30,6 +49,29 @@ REFLECT_STRUCT_BEGIN(Position)
                     REFLECT_STRUCT_MEMBER(y)
 REFLECT_STRUCT_END()
 ```
+
+I added template struct feature to reflection. For instance :
+```
+template<typename C>
+struct Vec2 {
+    explicit Vec2(C x = 0, C y = 0) : x(x), y(y) {}
+
+    C x;
+    C y;
+
+    REFLECT_TEMPLATE(Vec2, C)
+                        REFLECT_STRUCT_MEMBER_TEMPLATE(x)
+                        REFLECT_STRUCT_MEMBER_TEMPLATE(y)
+    REFLECT_STRUCT_END()
+
+};
+REFLECT_STRUCT_INIT_TEMPLATE(Vec2)
+```
+There are some minor pitfalls in template struct reflection. You must
+not define your template argument T, because in Preshing's reflection macro
+uses T implicitly. Other than that just use reflect_template macros in header
+file or inl file.
+
 
 For now reflection supports basic types, however you can add your types easily.
 If you want to find more information about reflection, you can look at this site. Thanks to Preshing.
