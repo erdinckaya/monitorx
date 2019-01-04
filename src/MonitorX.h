@@ -107,18 +107,24 @@ namespace monitorx {
                 auto obj = (const void *) currentEntity.component<C>().get();
                 auto *typeDesc = dynamic_cast<reflect::TypeDescriptor_Struct *>(reflect::TypeResolver<C>::get());
                 if (typeDesc != nullptr) {
-                    RenderStruct(typeDesc, obj, std::to_string(currentEntity.id().id()));
+                    RenderStruct(typeDesc, obj, std::to_string(currentEntity.id().id()), nullptr);
                 }
             }
 
             RenderComponent<C1, Components...>();
         }
 
-        void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase) {
+        void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase,
+                          const char *recursiveName) {
             auto elemID = std::string(typeDesc->name) + "##" + idBase;
+            if (recursiveName != nullptr) {
+                elemID = std::string(recursiveName) + "##" + idBase;
+            }
+
             if (ImGui::TreeNode(elemID.c_str())) {
                 elemID = idBase + std::string(typeDesc->name);
                 for (auto member : typeDesc->members) {
+                    bool isStruct = false;
                     auto strID = std::string(member.name).append("##").append(elemID);
                     if (strcmp(member.type->type(obj).c_str(), "float") == 0) {
                         ImGui::PushItemWidth(100);
@@ -141,13 +147,20 @@ namespace monitorx {
                     } else if (strcmp(member.type->type(obj).c_str(), "bool") == 0) {
                         ImGui::Checkbox(strID.c_str(), (bool *) ((char *) obj + member.offset));
                     } else if (strcmp(member.type->type(obj).c_str(), "struct") == 0) {
+                        isStruct = true;
                         const void *next_obj = ((char *) obj + member.offset);
                         std::string nextID = elemID.append(member.name);
-                        RenderStruct(dynamic_cast<reflect::TypeDescriptor_Struct *>(member.type), next_obj, nextID);
+                        RenderStruct(dynamic_cast<reflect::TypeDescriptor_Struct *>(member.type), next_obj, nextID, member.name);
                     }
 
                     ImGui::SameLine(0);
-                    ImGui::Text("%s", member.type->type(obj).c_str());
+                    const char* text = member.type->type(obj).c_str();
+                    if (isStruct) {
+                        auto nextType = dynamic_cast<reflect::TypeDescriptor_Struct *>(member.type);
+                        text = nextType->name;
+                    }
+
+                    ImGui::Text("%s", text);
                 }
 
                 ImGui::TreePop();
