@@ -55,7 +55,7 @@ int main(int, char **) {
             }
         }
 
-        monitorX.Render<Position, Size, Visibility, end_of_list>();
+        monitorX.Render<Position, Size, Visibility, RenderContext, end_of_list>();
         SDL_GL_MakeCurrent(window, gl_context);
         SDL_GL_SwapWindow(window);
         glClear(GL_COLOR_BUFFER_BIT);
