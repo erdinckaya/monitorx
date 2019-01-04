@@ -74,8 +74,8 @@ file or inl file.
 
 
 For now reflection supports basic types, however you can add your types easily.
-If you want to find more information about reflection, you can look at this site. Thanks to Preshing.
-https://preshing.com/20180116/a-primitive-reflection-system-in-cpp-part-1/
+If you want to find more information about reflection, you can look at this [site](https://preshing.com/20180116/a-primitive-reflection-system-in-cpp-part-1/). Thanks to Preshing.
+
 
 In Primitives.cpp just add the template like that.
 
