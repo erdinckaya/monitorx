@@ -77,8 +77,8 @@ namespace monitorx {
         bool showDemo;
         bool entityEditorFlag;
         //endregion
-        ImGuiTextFilter filter;
 
+        ImGuiTextFilter filter;
 
         template<typename... Components>
         void RenderEntityEditor() {
@@ -87,8 +87,9 @@ namespace monitorx {
             }
 
             ImGui::Begin("MonitorX", &entityEditorFlag, 0);
+
+            filter.Draw("Filter Components", 300);
             ImGui::Separator();
-            filter.Draw("Filter Component");
 
             for (entityx::Entity entity : entityX->entities.entities_for_debugging()) {
                 auto str = "Entity##" + std::to_string(entity.id().id());
@@ -120,8 +121,7 @@ namespace monitorx {
 
         void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase,
                           const char *recursiveName) {
-        void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase) {
-            if (!filter.PassFilter(typeDesc->name)) {
+            if (recursiveName == nullptr && !filter.PassFilter(typeDesc->name)) {
                 return;
             }
 
