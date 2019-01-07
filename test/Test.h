@@ -10,6 +10,7 @@
 #include "components/Position.h"
 #include "components/Size.h"
 #include "components/Visibility.h"
+#include "components/RenderContext.h"
 
 
 void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::EntityX &entityX) {
@@ -33,6 +34,7 @@ void TestKey(SDL_Scancode scancode, monitorx::MonitorX &monitorX, entityx::Entit
             entity.assign<Position>(30, 40);
             entity.assign<Size>(50, 50, Vec2<float>(400, 500));
             entity.assign<Visibility>(false);
+            entity.assign<RenderContext>(4, Rect<float>(10, 20, 30, 40));
 
             monitorX.ShowEntityEditor(true);
 

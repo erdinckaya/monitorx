@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.1)
 project(monitorx)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -18,7 +18,7 @@ add_executable(monitorx main.cpp src/3rdParty/ImGui/imconfig.h src/3rdParty/ImGu
         src/3rdParty/ImGui/imstb_textedit.h src/3rdParty/ImGui/imstb_truetype.h src/MonitorX.cpp src/MonitorX.h test/Test.h
         test/components/Position.h test/components/Size.h
         src/3rdParty/FlexibleReflection/Primitives.cpp src/3rdParty/FlexibleReflection/Reflect.h
-        test/components/ComponentReflections.cpp test/components/Visibility.h test/Vec2.h)
+        test/components/ComponentReflections.cpp test/components/Visibility.h test/Vec2.h test/Rect.h test/components/RenderContext.h)
 
 
 target_link_libraries(monitorx ${ENTITYX_LIBRARY} ${SDL2_LIBRARY} ${OPENGL_gl_LIBRARY})
