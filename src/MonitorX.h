@@ -77,6 +77,7 @@ namespace monitorx {
         bool showDemo;
         bool entityEditorFlag;
         //endregion
+        ImGuiTextFilter filter;
 
 
         template<typename... Components>
@@ -85,7 +86,10 @@ namespace monitorx {
                 return;
             }
 
-            ImGui::Begin("Entity Editor", &entityEditorFlag, 0);
+            ImGui::Begin("MonitorX", &entityEditorFlag, 0);
+            ImGui::Separator();
+            filter.Draw("Filter Component");
+
             for (entityx::Entity entity : entityX->entities.entities_for_debugging()) {
                 auto str = "Entity##" + std::to_string(entity.id().id());
                 if (ImGui::CollapsingHeader(str.c_str())) {
@@ -115,6 +119,10 @@ namespace monitorx {
         }
 
         void RenderStruct(reflect::TypeDescriptor_Struct *typeDesc, const void *obj, const std::string &idBase) {
+            if (!filter.PassFilter(typeDesc->name)) {
+                return;
+            }
+
             auto elemID = std::string(typeDesc->name) + "##" + idBase;
             if (ImGui::TreeNode(elemID.c_str())) {
                 elemID = idBase + std::string(typeDesc->name);
